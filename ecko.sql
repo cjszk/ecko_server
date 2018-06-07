@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
     id serial PRIMARY KEY,
     message text NOT NULL,
-    date text NOT NULL,
+    time text NOT NULL,
     exact_time int NOT NULL,
     location json NOT NULL,
     thumbs_up int,
@@ -19,7 +19,7 @@ CREATE TABLE replies (
     message_id int REFERENCES messages ON DELETE SET NULL,
     id serial PRIMARY KEY,
     message text NOT NULL,
-    date text NOT NULL,
+    time text NOT NULL,
     exact_time int NOT NULL,
     thumbs_up int,
     thumbs_down int
@@ -27,10 +27,10 @@ CREATE TABLE replies (
 
 ALTER SEQUENCE messages_id_seq RESTART WITH 1000;
 
-INSERT INTO messages (message, date, exact_time, location, thumbs_up, thumbs_down) VALUES
+INSERT INTO messages (message, time, exact_time, location, thumbs_up, thumbs_down) VALUES
     (
         'test',
-        'Apr-11',
+        'Apr-11 3:23 PM',
         1235654654,
         '{
             "latitude": "33",
@@ -40,11 +40,11 @@ INSERT INTO messages (message, date, exact_time, location, thumbs_up, thumbs_dow
         2
     );
 
-INSERT INTO replies (message_id, message, date, exact_time, thumbs_up, thumbs_down) VALUES
+INSERT INTO replies (message_id, message, time, exact_time, thumbs_up, thumbs_down) VALUES
     (
         '1000',
         'test',
-        'Apr-11',
+        'Apr-11 3:51 PM',
         1235654654,
         4,
         2

@@ -10,12 +10,12 @@ router.get('/messages', (req, res, next) => {
 })
 
 router.post('/messages', (req, res, next) => {
-    const { message, date, exact_time, location } = req.body;
-    const object = { message, date, exact_time, location }
+    const { message, time, exact_time, location } = req.body;
+    const object = { message, time, exact_time, location }
 
     knex('messages')
         .insert(object)
-        .returning(['message', 'date', 'exact_time', 'location'])
+        .returning(['message', 'time', 'exact_time', 'location'])
         .then((result) => {
             res.json(result)
         })
