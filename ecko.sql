@@ -21,6 +21,7 @@ CREATE TABLE replies (
     message text NOT NULL,
     time text NOT NULL,
     exact_time BIGSERIAL NOT NULL,
+    location json NOT NULL,
     thumbs_up int,
     thumbs_down int
 );
@@ -41,12 +42,16 @@ INSERT INTO messages (message, time, exact_time, location, thumbs_up, thumbs_dow
         2
     );
 
-INSERT INTO replies (message_id, message, time, exact_time, thumbs_up, thumbs_down) VALUES
+INSERT INTO replies (message_id, message, time, exact_time, location, thumbs_up, thumbs_down) VALUES
     (
         '1000',
         'test',
         'Apr-11 3:51 PM',
         1528343377691,
+        '{
+            "latitude": "33",
+            "longitude": "43"
+        }',
         4,
         2
     );
