@@ -4,27 +4,35 @@ const router = express.Router();
 
 router.get('/messages', (req, res, next) => {
     let replies = [];
-    let returnObj;
+    let returnObjects;
+    
     knex.select()
+    .from('replies')
+    .then((result => {
+        result.forEach((reply) => {
+            replies.push(reply)
+        })                   
+    }))
+    .then(() => {
+        knex.select()
         .from('messages')
-        .then((result) => {
-            returnObj = result[0];
-            returnObj.replies = [];
-            knex.select()
-                .from('replies')
-                .then((result => {
-                    result.forEach((reply) => {
-                        if (reply.id === returnObj.id) {
-                            replies.push(reply)
-                        }
-                    })
-                    returnObj.replies = replies;
-                    console.log(returnObj)
-                    res.json(returnObj)                    
-                }))
-                .catch(err => next(err))
+        .then((results) => {
+            returnObjects = results;
+            for (let i=0; i<returnObjects.length; i++) {
+                returnObjects[i].replies = [];
+                replies.forEach((reply) => {
+                    if (reply.message_id === returnObjects[i].id) {
+                        returnObjects[i].replies.push(reply)
+                    }
+                })
+            }
+            res.json(returnObjects);
         })
         .catch(err => next(err))
+    })
+    .catch(err => next(err))
+
+
 })
 
 router.post('/messages', (req, res, next) => {
