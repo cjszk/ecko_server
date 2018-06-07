@@ -3,9 +3,27 @@ const knex = require('../knex');
 const router = express.Router();
 
 router.get('/messages', (req, res, next) => {
+    let replies = [];
+    let returnObj;
     knex.select()
         .from('messages')
-        .then((result) => res.json(result))
+        .then((result) => {
+            returnObj = result[0];
+            returnObj.replies = [];
+            knex.select()
+                .from('replies')
+                .then((result => {
+                    result.forEach((reply) => {
+                        if (reply.id === returnObj.id) {
+                            replies.push(reply)
+                        }
+                    })
+                    returnObj.replies = replies;
+                    console.log(returnObj)
+                    res.json(returnObj)                    
+                }))
+                .catch(err => next(err))
+        })
         .catch(err => next(err))
 })
 
